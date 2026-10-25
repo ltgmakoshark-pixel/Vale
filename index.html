@@ -95,7 +95,7 @@
 </head>
 <body>
 
-<img id="photo" src="photos/1.jpg" alt="Photo Viewer">
+<img id="photo" src="1.jpg" alt="Photo Viewer">
 
 <!-- Crisp HTML/CSS Overlay replacing the blurry image text -->
 <div id="redeem-overlay">
@@ -132,11 +132,11 @@
 
     function show() {
         if (current === 1) {
-            photo.src = "photos/1.jpg";
+            photo.src = "1.jpg";
             overlay.style.display = "none"; // Hide overlay on photo 1
         } else if (current === 2) {
             updateTimestamp(); // Generates the fresh live date/time right when switching to photo 2
-            photo.src = "photos/2.jpg"; // (or 'photos/2_base.jpg' if you cropped the old blurry banner out)
+            photo.src = "2.jpg"; // (or 'photos/2_base.jpg' if you cropped the old blurry banner out)
             overlay.style.display = "flex"; // Show crisp text overlay
         }
     }
