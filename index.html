@@ -18,17 +18,29 @@
         overflow: hidden;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        inset: 0;
     }
 
-    /* Fullscreen background photo container */
-    #photo-container {
-        width: 100vw;
-        height: 100vh;
-        background-image: url('1.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+    /* Fixed image container ensuring true centering */
+    .image-wrapper {
         position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Fullscreen image centered cleanly */
+    img#photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
         user-select: none;
     }
 
@@ -38,7 +50,7 @@
         bottom: 50px; 
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(180, 180, 180, 0.88); /* Matches the grey oval style */
+        background: rgba(180, 180, 180, 0.88);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         padding: 12px 24px;
@@ -48,7 +60,7 @@
         gap: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         user-select: none;
-        pointer-events: none; /* Ensures taps pass right through to tap zones */
+        pointer-events: none;
         white-space: nowrap;
         z-index: 5;
     }
@@ -81,7 +93,7 @@
         margin-top: 1px;
     }
 
-    /* Invisible tap zones covering the whole screen */
+    /* Invisible tap zones */
     .tap-zone {
         position: absolute;
         top: 0;
@@ -96,8 +108,10 @@
 </head>
 <body>
 
-<div id="photo-container">
-    <!-- Crisp HTML/CSS Overlay replacing the blurry image text -->
+<div class="image-wrapper">
+    <img id="photo" src="1.jpg" alt="Photo Viewer">
+
+    <!-- Crisp HTML/CSS Overlay -->
     <div id="redeem-overlay">
         <div class="emoji">💸</div>
         <div class="text-content">
@@ -114,16 +128,14 @@
     let current = 1;
     const total = 2;
 
-    const container = document.getElementById("photo-container");
+    const photo = document.getElementById("photo");
     const overlay = document.getElementById("redeem-overlay");
     const timestampText = document.getElementById("timestamp-text");
 
     function updateTimestamp() {
         const now = new Date();
-        
         const optionsDate = { weekday: 'long', month: 'short', day: 'numeric' };
         const dateStr = now.toLocaleDateString('en-US', optionsDate);
-        
         const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
         const timeStr = now.toLocaleTimeString('en-US', optionsTime);
 
@@ -132,11 +144,11 @@
 
     function show() {
         if (current === 1) {
-            container.style.backgroundImage = "url('1.jpg')";
+            photo.src = "1.jpg";
             overlay.style.display = "none";
         } else if (current === 2) {
             updateTimestamp();
-            container.style.backgroundImage = "url('2.jpg')"; 
+            photo.src = "2.jpg"; 
             overlay.style.display = "flex";
         }
     }
