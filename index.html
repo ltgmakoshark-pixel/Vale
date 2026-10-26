@@ -8,7 +8,7 @@
 <title>Tap Photo Viewer</title>
 
 <style>
-    /* Fullscreen setup */
+    /* Fullscreen body */
     html, body {
         margin: 0;
         padding: 0;
@@ -21,76 +21,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        position: fixed;
-        inset: 0;
     }
 
-    /* Fixed image container ensuring true centering */
-    .image-wrapper {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Fullscreen image centered cleanly */
-    img#photo {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center center;
+    /* Fullscreen image */
+    img {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; /* fills screen, crops if needed */
         user-select: none;
-    }
-
-    /* Crisp Dynamic Overlay for Photo 2 */
-    #redeem-overlay {
-        position: absolute;
-        bottom: 50px; 
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(180, 180, 180, 0.88);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: 12px 24px;
-        border-radius: 40px;
-        display: none; /* Hidden by default on photo 1 */
-        align-items: center;
-        gap: 12px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        user-select: none;
-        pointer-events: none;
-        white-space: nowrap;
-        z-index: 5;
-    }
-
-    #redeem-overlay .emoji {
-        font-size: 28px;
-    }
-
-    #redeem-overlay .text-content {
-        display: flex;
-        flex-direction: column;
-    }
-
-    #redeem-overlay .title {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-weight: 700;
-        font-size: 17px;
-        color: #ffffff;
-        letter-spacing: -0.3px;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    #redeem-overlay .timestamp {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-weight: 500;
-        font-size: 13px;
-        color: #f1f1f1;
-        letter-spacing: -0.2px;
-        -webkit-font-smoothing: antialiased;
-        margin-top: 1px;
     }
 
     /* Invisible tap zones */
@@ -104,53 +42,24 @@
 
     .left { left: 0; }
     .right { right: 0; }
+
 </style>
 </head>
 <body>
 
-<div class="image-wrapper">
-    <img id="photo" src="1.jpg" alt="Photo Viewer">
+<img id="photo" src="1.jpg" alt="Photo Viewer">
 
-    <!-- Crisp HTML/CSS Overlay -->
-    <div id="redeem-overlay">
-        <div class="emoji">💸</div>
-        <div class="text-content">
-            <span class="title">Deal Redeemed</span>
-            <span class="timestamp" id="timestamp-text">Monday, Jan 26, at 3:38 PM</span>
-        </div>
-    </div>
-
-    <div class="tap-zone left" onclick="prev()"></div>
-    <div class="tap-zone right" onclick="next()"></div>
-</div>
+<div class="tap-zone left" onclick="prev()"></div>
+<div class="tap-zone right" onclick="next()"></div>
 
 <script>
     let current = 1;
-    const total = 2;
+    const total = 2; // total number of photos
 
     const photo = document.getElementById("photo");
-    const overlay = document.getElementById("redeem-overlay");
-    const timestampText = document.getElementById("timestamp-text");
-
-    function updateTimestamp() {
-        const now = new Date();
-        const optionsDate = { weekday: 'long', month: 'short', day: 'numeric' };
-        const dateStr = now.toLocaleDateString('en-US', optionsDate);
-        const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
-        const timeStr = now.toLocaleTimeString('en-US', optionsTime);
-
-        timestampText.textContent = `${dateStr}, at ${timeStr}`;
-    }
 
     function show() {
-        if (current === 1) {
-            photo.src = "1.jpg";
-            overlay.style.display = "none";
-        } else if (current === 2) {
-            updateTimestamp();
-            photo.src = "2.jpg"; 
-            overlay.style.display = "flex";
-        }
+        photo.src = `${current}.jpg`;
     }
 
     function next() {
@@ -170,14 +79,15 @@
         setTimeout(() => window.scrollTo(0, 1), 0);
     });
 
-    // Swipe left/right support
+    // Optional: allow swipe left/right to change photos
     let startX = 0;
     window.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
     window.addEventListener("touchend", e => {
         let endX = e.changedTouches[0].clientX;
-        if (endX - startX > 50) prev();      
-        else if (startX - endX > 50) next(); 
+        if (endX - startX > 50) prev();      // swipe right
+        else if (startX - endX > 50) next(); // swipe left
     });
+
 </script>
 
 </body>
