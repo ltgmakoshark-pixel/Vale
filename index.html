@@ -21,15 +21,19 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        position: relative;
+        position: fixed; /* Fixes mobile viewport jumping/shifting */
+        inset: 0;
     }
 
-    /* Fullscreen image */
+    /* Centered responsive image */
     img#photo {
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover; /* fills screen, crops if needed */
+        max-width: 100vw;
+        max-height: 100vh;
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Ensures the whole picture is visible and centered */
         user-select: none;
+        display: block;
     }
 
     /* Crisp Dynamic Overlay for Photo 2 */
@@ -48,7 +52,7 @@
         gap: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         user-select: none;
-        pointer-events: none; /* Ensures taps pass right through the overlay to the tap zones */
+        pointer-events: none; /* Ensures taps pass right through to tap zones */
         white-space: nowrap;
         z-index: 5;
     }
@@ -121,7 +125,6 @@
     function updateTimestamp() {
         const now = new Date();
         
-        // Format options to match exact date/time style
         const optionsDate = { weekday: 'long', month: 'short', day: 'numeric' };
         const dateStr = now.toLocaleDateString('en-US', optionsDate);
         
@@ -134,11 +137,11 @@
     function show() {
         if (current === 1) {
             photo.src = "1.jpg";
-            overlay.style.display = "none"; // Hide overlay on photo 1
+            overlay.style.display = "none";
         } else if (current === 2) {
-            updateTimestamp(); // Generates the fresh live date/time right when switching to photo 2
+            updateTimestamp();
             photo.src = "2.jpg"; 
-            overlay.style.display = "flex"; // Show crisp text overlay
+            overlay.style.display = "flex";
         }
     }
 
@@ -164,40 +167,13 @@
     window.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
     window.addEventListener("touchend", e => {
         let endX = e.changedTouches[0].clientX;
-        if (endX - startX > 50) prev();      // swipe right
-        else if (startX - endX > 50) next(); // swipe left
+        if (endX - startX > 50) prev();      
+        else if (startX - endX > 50) next(); 
     });
 </script>
 
 </body>
 </html>
-
-    function next() {
-        current++;
-        if (current > total) current = 1;
-        show();
-    }
-
-    function prev() {
-        current--;
-        if (current < 1) current = total;
-        show();
-    }
-
-    // Hide mobile Safari URL bar on load
-    window.addEventListener("load", function() {
-        setTimeout(() => window.scrollTo(0, 1), 0);
-    });
-
-    // Swipe left/right support
-    let startX = 0;
-    window.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
-    window.addEventListener("touchend", e => {
-        let endX = e.changedTouches[0].clientX;
-        if (endX - startX > 50) prev();      // swipe right
-        else if (startX - endX > 50) next(); // swipe left
-    });
-</script>
 
 </body>
 </html>
