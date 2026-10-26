@@ -8,7 +8,7 @@
 <title>Tap Photo Viewer</title>
 
 <style>
-    /* Fullscreen body */
+    /* Fullscreen setup */
     html, body {
         margin: 0;
         padding: 0;
@@ -18,28 +18,24 @@
         overflow: hidden;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed; /* Fixes mobile viewport jumping/shifting */
-        inset: 0;
     }
 
-    /* Centered responsive image */
-    img#photo {
-        max-width: 100vw;
-        max-height: 100vh;
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* Ensures the whole picture is visible and centered */
+    /* Fullscreen background photo container */
+    #photo-container {
+        width: 100vw;
+        height: 100vh;
+        background-image: url('1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
         user-select: none;
-        display: block;
     }
 
     /* Crisp Dynamic Overlay for Photo 2 */
     #redeem-overlay {
         position: absolute;
-        bottom: 75px; 
+        bottom: 50px; 
         left: 50%;
         transform: translateX(-50%);
         background: rgba(180, 180, 180, 0.88); /* Matches the grey oval style */
@@ -85,7 +81,7 @@
         margin-top: 1px;
     }
 
-    /* Invisible tap zones */
+    /* Invisible tap zones covering the whole screen */
     .tap-zone {
         position: absolute;
         top: 0;
@@ -100,25 +96,25 @@
 </head>
 <body>
 
-<img id="photo" src="1.jpg" alt="Photo Viewer">
-
-<!-- Crisp HTML/CSS Overlay replacing the blurry image text -->
-<div id="redeem-overlay">
-    <div class="emoji">💸</div>
-    <div class="text-content">
-        <span class="title">Deal Redeemed</span>
-        <span class="timestamp" id="timestamp-text">Monday, Jan 26, at 3:38 PM</span>
+<div id="photo-container">
+    <!-- Crisp HTML/CSS Overlay replacing the blurry image text -->
+    <div id="redeem-overlay">
+        <div class="emoji">💸</div>
+        <div class="text-content">
+            <span class="title">Deal Redeemed</span>
+            <span class="timestamp" id="timestamp-text">Monday, Jan 26, at 3:38 PM</span>
+        </div>
     </div>
-</div>
 
-<div class="tap-zone left" onclick="prev()"></div>
-<div class="tap-zone right" onclick="next()"></div>
+    <div class="tap-zone left" onclick="prev()"></div>
+    <div class="tap-zone right" onclick="next()"></div>
+</div>
 
 <script>
     let current = 1;
-    const total = 2; // total number of photos
+    const total = 2;
 
-    const photo = document.getElementById("photo");
+    const container = document.getElementById("photo-container");
     const overlay = document.getElementById("redeem-overlay");
     const timestampText = document.getElementById("timestamp-text");
 
@@ -136,11 +132,11 @@
 
     function show() {
         if (current === 1) {
-            photo.src = "1.jpg";
+            container.style.backgroundImage = "url('1.jpg')";
             overlay.style.display = "none";
         } else if (current === 2) {
             updateTimestamp();
-            photo.src = "2.jpg"; 
+            container.style.backgroundImage = "url('2.jpg')"; 
             overlay.style.display = "flex";
         }
     }
